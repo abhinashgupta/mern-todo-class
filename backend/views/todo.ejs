@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo</title>
+  </head>
+  <body>
+    <h1>TODO-LIST</h1>
+
+    <h3 id="heading">Create Todo</h3>
+
+    <!-- Create Section -->
+
+    <form action="/createTodo" method="post">
+      <input type="hidden" name="userId" id="id">
+      <input type="text" placeholder="Todo name" name="name" id="name"/>
+      <input type="email" placeholder="Todo email" name="email" id="email"/>
+      <input type="text" placeholder="Todo description" name="description" id="description"/>
+      <select name="status" id="status">
+        <option name="status">Pending</option>
+        <option name="status">Done</option>
+      </select>
+      <button id="form-btn" type="submit">Create</button>
+    </form>
+
+    <!-- Read Section -->
+
+    <ul>
+      <% todos.forEach((todo)=>{ %>
+      <li>
+        <h4><%= todo.name %></h4>
+        <h4><%= todo.email %></h4>
+        <h4><%= todo.description %></h4>
+        <h4>Status :<%= todo.status %></h4>
+
+        <!-- Delete Section -->
+
+        <form action="/deleteTodo/<%= todo._id %>" method="get">
+          <button type="submit">Delete</button>
+        </form>
+
+        <!-- Input Update Section -->
+        <!-- <form action="/updateTodo/<%= todo._id %>" method="post">
+          <input type="text" placeholder="Todo name" name="name" value="<%= todo.name %>"/>
+          <input type="email" placeholder="Todo email" name="email" value="<%= todo.email %>" />
+          <input
+            type="text"
+            placeholder="Todo description"
+            name="description"
+            value="<%= todo.description %>"
+          />
+         <select name="status">
+           <option value="Pending" <%= todo.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+           <option value="Done" <%= todo.status === 'Done' ? 'selected' : '' %>>Done</option>
+          </select>
+
+          <button type="submit">Update</button>
+        </form> -->
+        
+        <!-- Update Section with better functinality -->
+         <button onclick="editTodo('<%= todo._id %>' , '<%= todo.name %>' , '<%= todo.email %>' , '<%= todo.description %>' , '<%= todo.status %>')" >Edit</button>
+    </li>
+      <% }) %>
+    </ul>
+  </body>
+
+  <script>
+    function editTodo(id , name , email , description , status){
+       document.getElementById('id').value = id;
+       document.getElementById('name').value = name;
+       document.getElementById('email').value = email;
+       document.getElementById('description').value = description;
+       document.getElementById('status').value = status;
+
+       document.getElementById('form-btn').innerHTML = "Update";
+       document.getElementById('heading').innerHTML = "Update TODO";
+    }
+  </script>
+</html>
