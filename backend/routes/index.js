@@ -18,23 +18,28 @@ router.get('/todo', async (req, res) => {
 });
 
 router.post("/createTodo", async (req, res) => {
-  const { name, email, description, status, userId } = req.body;
-  if (userId) {
-    await UserTodo.findByIdAndUpdate(
-      { _id: userId },
-      { name, email, description, status }
-    );
-    res.redirect('/todo');
-  } else {
-    const todo = await UserTodo.create({
-      name,
-      email,
-      description,
-      status,
-    });
-    res.redirect("/todo");
-  }
-  
+  try {
+    const { name, email, description, status, userId } = req.body;
+    if (userId) {
+      await UserTodo.findByIdAndUpdate(
+        { _id: userId },
+        { name, email, description, status }
+      );
+      // res.redirect('/todo');
+      res.status(200).json({ message: "User Updated Succesfully" });
+    } else {
+      const todo = await UserTodo.create({
+        name,
+        email,
+        description,
+        status,
+      });
+      // res.redirect("/todo");
+      res.status(200).json({ message: "User Created Succesfully" });
+    }
+  } catch (error) {
+    res.status(500).json({message : "Internal Server error while creating or updating user"})
+  };
 });
 
 router.get('/deleteTodo/:id', async (req, res) => {
